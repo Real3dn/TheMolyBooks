@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { ReaderView } from '../src/components/ReaderView';
 import { CANONS } from '../src/data/canons';
 
@@ -48,7 +48,9 @@ describe('ReaderView component', () => {
     );
 
     const copyBtn = screen.getByRole('button', { name: /copy/i });
-    fireEvent.click(copyBtn);
+    await act(async () => {
+      fireEvent.click(copyBtn);
+    });
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expect.stringContaining(punchline));
   });
 
@@ -118,9 +120,47 @@ describe('ReaderView component', () => {
     );
 
     const shareBtn = screen.getByRole('button', { name: /share/i });
-    fireEvent.click(shareBtn);
+    await act(async () => {
+      fireEvent.click(shareBtn);
+    });
     expect(mockShare).toHaveBeenCalledWith(expect.objectContaining({
       text: expect.stringContaining(punchline)
     }));
+  });
+
+  it('does not fall back to copy when native share is cancelled (AbortError)', async () => {
+    const book = CANONS.bible.books[0];
+    const punchline = 'Share cancel test';
+    const abortErr = new Error('Share canceled');
+    abortErr.name = 'AbortError';
+    const mockShare = vi.fn().mockRejectedValue(abortErr);
+    const mockWriteText = vi.fn().mockResolvedValue(undefined);
+
+    Object.assign(navigator, {
+      share: mockShare,
+      clipboard: {
+        writeText: mockWriteText
+      }
+    });
+
+    render(
+      <ReaderView
+        collectionId="bible"
+        book={book}
+        chapter={1}
+        verse={1}
+        punchline={punchline}
+        onNavigateBack={() => {}}
+      />
+    );
+
+    const shareBtn = screen.getByRole('button', { name: /share/i });
+    await act(async () => {
+      fireEvent.click(shareBtn);
+    });
+
+    expect(mockShare).toHaveBeenCalledTimes(1);
+    expect(mockWriteText).not.toHaveBeenCalled();
+    expect(screen.queryByText(/Copied Reference/i)).not.toBeInTheDocument();
   });
 });

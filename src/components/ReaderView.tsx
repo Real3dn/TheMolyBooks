@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Copy, Check, Bookmark, Share2 } from 'lucide-react';
 import { CollectionId, Book, CANONS } from '../data/canons';
 
@@ -20,15 +20,31 @@ export function ReaderView({
   onNavigateBack
 }: ReaderViewProps) {
   const [copied, setCopied] = useState(false);
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const collection = CANONS[collectionId];
   const citation = collection.formatCitation(book, chapter, verse);
 
-  const handleCopy = () => {
+  useEffect(() => {
+    return () => {
+      if (copyTimerRef.current) {
+        clearTimeout(copyTimerRef.current);
+      }
+    };
+  }, []);
+
+  const handleCopy = async () => {
     const fullText = `"${punchline}" — ${citation.reference} (${collection.edition})`;
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(fullText);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      try {
+        await navigator.clipboard.writeText(fullText);
+        setCopied(true);
+        if (copyTimerRef.current) {
+          clearTimeout(copyTimerRef.current);
+        }
+        copyTimerRef.current = setTimeout(() => setCopied(false), 2000);
+      } catch {
+        // Clipboard write failed or permission denied
+      }
     }
   };
 
@@ -41,11 +57,15 @@ export function ReaderView({
           text: fullText,
         });
         return;
-      } catch {
-        // Fall back to copy if cancelled or unsupported
+      } catch (err) {
+        // Dismissing native share sheet on iOS Safari throws AbortError
+        if (err instanceof Error && err.name === 'AbortError') {
+          return;
+        }
+        // Fall back to copy if other share errors occur
       }
     }
-    handleCopy();
+    await handleCopy();
   };
 
   return (
