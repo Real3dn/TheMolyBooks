@@ -19,9 +19,10 @@ export function BookListScreen({ collectionId, onSelectBook }: BookListScreenPro
   }, [collection]);
 
   const filteredBooks = useMemo(() => {
+    const query = searchTerm.trim().toLowerCase();
     return collection.books.filter(b => {
-      const matchesSearch = b.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            b.abbr.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesSearch = !query || b.name.toLowerCase().includes(query) ||
+                            b.abbr.toLowerCase().includes(query);
       const matchesSection = selectedSection === 'all' || b.section === selectedSection;
       return matchesSearch && matchesSection;
     });
@@ -35,10 +36,11 @@ export function BookListScreen({ collectionId, onSelectBook }: BookListScreenPro
           <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
+            aria-label="Search books or treatises"
             placeholder="Search books or treatises..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-canon-gold/60"
+            className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-100 placeholder-slate-500 text-base focus:outline-none focus:border-canon-gold/60"
           />
         </div>
 

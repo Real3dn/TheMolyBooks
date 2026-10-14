@@ -10,8 +10,9 @@ describe('BookListScreen component', () => {
     expect(screen.getByText('Genesis')).toBeInTheDocument();
     expect(screen.getByText('Matthew')).toBeInTheDocument();
 
-    const searchInput = screen.getByPlaceholderText(/search books/i);
-    fireEvent.change(searchInput, { target: { value: 'Rom' } });
+    const searchInput = screen.getByRole('textbox', { name: /search books or treatises/i });
+    expect(searchInput.className).toContain('text-base');
+    fireEvent.change(searchInput, { target: { value: '  Rom  ' } });
 
     expect(screen.getByText('Romans')).toBeInTheDocument();
     expect(screen.queryByText('Genesis')).not.toBeInTheDocument();

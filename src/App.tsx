@@ -89,7 +89,7 @@ export default function App() {
   const headerProps = getHeaderProps();
 
   return (
-    <div className="flex flex-col h-screen w-screen bg-slate-950 text-slate-100 overflow-hidden font-sans">
+    <div className="flex flex-col h-dvh h-screen w-screen max-w-full overflow-hidden bg-slate-950 text-slate-100 font-sans">
       <Header
         title={headerProps.title}
         subtitle={headerProps.subtitle}
@@ -98,7 +98,7 @@ export default function App() {
         onSecretTrigger={() => setIsSecretOpen(true)}
       />
 
-      <main className="flex-1 flex flex-col overflow-hidden relative">
+      <main className="flex-1 flex flex-col overflow-hidden relative pb-[env(safe-area-inset-bottom)]">
         {view === 'library' && (
           <LibraryScreen onSelectCollection={handleSelectCollection} />
         )}

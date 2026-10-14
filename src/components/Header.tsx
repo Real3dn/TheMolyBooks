@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import { ChevronLeft } from 'lucide-react';
 
 export interface HeaderProps {
@@ -17,7 +17,6 @@ export function Header({
   onSecretTrigger
 }: HeaderProps) {
   const tapTimesRef = useRef<number[]>([]);
-  const [, setRerender] = useState(0);
 
   const handleTap = () => {
     const now = Date.now();
@@ -30,11 +29,10 @@ export function Header({
         onSecretTrigger();
       }
     }
-    setRerender(n => n + 1);
   };
 
   return (
-    <header className="sticky top-0 z-30 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 px-4 pt-3 pb-3 transition-colors">
+    <header className="sticky top-0 z-30 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 px-4 pt-[max(0.75rem,env(safe-area-inset-top))] pb-3 transition-colors">
       <div className="flex items-center justify-between min-h-[44px]">
         <div className="w-16 flex items-center">
           {showBack && onBack && (
