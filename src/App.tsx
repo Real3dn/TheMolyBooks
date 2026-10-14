@@ -27,6 +27,7 @@ export default function App() {
 
   const handleSelectCollection = (id: CollectionId) => {
     setSelectedCollection(id);
+    setSelectedBook(null);
     setView('books');
   };
 

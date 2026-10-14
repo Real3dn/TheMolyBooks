@@ -37,5 +37,42 @@ describe('App Full Flow', () => {
     fireEvent.click(headerTap);
 
     expect(screen.getByText('Secret Configuration')).toBeInTheDocument();
+
+    // Change punchline in the textarea
+    const bibleInput = screen.getByLabelText(/bible punchline/i);
+    fireEvent.change(bibleInput, { target: { value: 'Custom updated punchline text!' } });
+
+    // Click Save & Close
+    const saveBtn = screen.getByRole('button', { name: /save & close/i });
+    fireEvent.click(saveBtn);
+
+    // Modal should close
+    expect(screen.queryByText('Secret Configuration')).not.toBeInTheDocument();
+
+    // Navigate to reader view to verify updated punchline renders
+    fireEvent.click(screen.getByText(/The Holy Scriptures/i));
+    fireEvent.click(screen.getByText('Genesis'));
+    fireEvent.click(screen.getByRole('button', { name: '1' }));
+    fireEvent.click(screen.getByRole('button', { name: '1' }));
+
+    expect(screen.getByText('Custom updated punchline text!')).toBeInTheDocument();
+  });
+
+  it('clears selectedBook when switching collections', () => {
+    render(<App />);
+
+    // Select Bible -> Genesis -> Chapter picker
+    fireEvent.click(screen.getByText(/The Holy Scriptures/i));
+    fireEvent.click(screen.getByText('Genesis'));
+    expect(screen.getByRole('button', { name: '1' })).toBeInTheDocument();
+
+    // Navigate back to Library
+    fireEvent.click(screen.getByRole('button', { name: /back/i }));
+    fireEvent.click(screen.getByRole('button', { name: /back/i }));
+    expect(screen.getByText(/Corpus Aristotelicum/i)).toBeInTheDocument();
+
+    // Switch to Aristotle -> Should display Aristotle book list, not Chapter picker
+    fireEvent.click(screen.getByText(/Corpus Aristotelicum/i));
+    expect(screen.getByText('Categories')).toBeInTheDocument();
   });
 });

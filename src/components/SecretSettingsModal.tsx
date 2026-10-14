@@ -43,7 +43,7 @@ export function SecretSettingsModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-      <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-t-3xl sm:rounded-2xl p-6 shadow-2xl max-h-[90vh] flex flex-col">
+      <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-t-3xl sm:rounded-2xl p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] shadow-2xl max-h-[90vh] flex flex-col">
         {/* Modal Header */}
         <div className="flex items-center justify-between pb-4 border-b border-slate-800">
           <div className="flex items-center gap-2">
@@ -80,7 +80,7 @@ export function SecretSettingsModal({
               rows={3}
               value={bibleText}
               onChange={(e) => setBibleText(e.target.value)}
-              className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 text-sm font-serif focus:outline-none focus:border-canon-gold/60 resize-none"
+              className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 text-base font-serif focus:outline-none focus:border-canon-gold/60 resize-none"
             />
           </div>
 
@@ -97,7 +97,7 @@ export function SecretSettingsModal({
               rows={3}
               value={aristotleText}
               onChange={(e) => setAristotleText(e.target.value)}
-              className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 text-sm font-serif focus:outline-none focus:border-blue-400/60 resize-none"
+              className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 text-base font-serif focus:outline-none focus:border-blue-400/60 resize-none"
             />
           </div>
         </div>
