@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="115" fill="#0F172A"/>
+  <rect x="24" y="24" width="464" height="464" rx="95" fill="none" stroke="#C5A059" stroke-width="8" opacity="0.6"/>
+  <!-- Greek column / book icon -->
+  <path d="M136 120h240v272H136z" fill="#1E293B" stroke="#C5A059" stroke-width="12" rx="12"/>
+  <path d="M176 170h160M176 220h160M176 270h160M176 320h100" stroke="#C5A059" stroke-width="8" stroke-linecap="round"/>
+  <path d="M256 90v60M226 120h60" stroke="#E2E8F0" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="256" cy="380" r="16" fill="#C5A059"/>
+</svg>
